@@ -19,22 +19,26 @@ function doPost(e) {
    * POSTデータのメイン要素
    */
   const event = JSON.parse(e.postData.contents).events[0];
+  console.info(event);
   const replyToken= event.replyToken;
+  const userId = event.source.userId;
+  
+  if (event.type == 'unfollow') {
+    signOut(userId);
+    console.log('test');
+  }
+  
   // エラー処理
   if (typeof replyToken === 'undefined') {
     return;
   }
-
-  const userId = event.source.userId;
+  
   const nickname = getUserProfile(userId);
 
   // ユーザーにbotがフォローされた場合に起きる処理
-  if(event.type == 'follow') {
-  }
-
-  if (event.type == 'unfollow') {
-  }
-
+  //  if(event.type == 'follow') {
+  //  }
+  
   if(event.type == 'message') {
     //基本はオウム返し、特定の言葉で異なった処理を行う。
     const userMessage = event.message.text;
