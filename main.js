@@ -33,7 +33,6 @@ function doPost(e) {
   }
 
   if (event.type == 'unfollow') {
-    signOut(userID);
   }
 
   if(event.type == 'message') {

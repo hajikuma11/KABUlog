@@ -63,3 +63,36 @@ function toNumber(nalp) {
   }
   return nnum + 1;
 }
+
+/**
+ * シートにIDと初期データを登録
+ * @param userid ユーザーID
+ * @returns true:登録成功, false:登録失敗
+ */
+function signUp(userid) {
+  let kabLastColumn = lastColumn(kabdata, 1);
+  const vals = kabdata.getRange("A1:"+ toAlphabet(kabLastColumn) +"1").getValues();
+  const num = targetRange[0].indexOf(userid);
+
+  if (num == -1) {
+    kabdata.insertColumnAfter(kabLastColumn);
+    userdata.insertColumnAfter(kabLastColumn);
+    kabLastColumn++;
+    kabdata.getRange(toAlphabet(kabLastColumn) + "1").setValue(userid);
+    userdata.getRange(toAlphabet(kabLastColumn) + "1").setValue(userid);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * 
+ * @param {string} userid ユーザーID
+ */
+function signOut(userid) {
+  const targetRange = kabdata.getRange("A1:"+ toAlphabet(lastColumn(kabdata, 1)) +"1").getValues();
+  const num = targetRange[0].indexOf(userid);
+  kabdata.deleteColumn(num+1);
+  userdata.deleteColumn(num+1);
+}
