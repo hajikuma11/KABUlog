@@ -9,7 +9,17 @@ const userdata = spreadsheet.getSheetByName('userdata');
  * @returns 最終列の数値
  */
 function lastColumn (sheet,rowNum) {
-  return sheet.getRange(rowNum, rowNum).getNextDataCell(SpreadsheetApp.Direction.NEXT).getColumn();
+  const lastCell = sheet.getRange(rowNum,1).getNextDataCell(SpreadsheetApp.Direction.NEXT);
+  vals = Object.values(lastCell.getValues());
+  if (vals[0] == '') {
+    if (!sheet.getRange(rowNum,1).getValue()) {
+      return 0;
+    } else {
+      return 1;
+    }
+  } else {
+    return sheet.getRange(rowNum, 1).getNextDataCell(SpreadsheetApp.Direction.NEXT).getColumn();
+  }
 }
 
 /**
@@ -19,7 +29,18 @@ function lastColumn (sheet,rowNum) {
  * @returns 最終行の数値
  */
 function lastRow (sheet,colNum) {
-  return sheet.getRange(colNum, colNum).getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow();
+  const lastCell = sheet.getRange(1, colNum).getNextDataCell(SpreadsheetApp.Direction.DOWN);
+  vals = Object.values(lastCell.getValues());
+  if (vals[0] == '') {
+    if (!sheet.getRange(1, colNum).getValue()) {
+      return 0;
+    } else {
+      return 1;
+    }
+  } else {
+    return sheet.getRange(1, colNum).getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow();
+  }
+  
 }
 
 /**
@@ -29,7 +50,7 @@ function lastRow (sheet,colNum) {
  */
 function toAlphabet (anum) {
   anum = anum - 1;
-  let alp = "";
+  let aalp = "";
   let a = 0;
   let b = 0;
 
@@ -65,14 +86,14 @@ function toNumber(nalp) {
 }
 
 /**
- * シートにIDと初期データを登録
+ * シートにIDを登録
  * @param userid ユーザーID
  * @returns true:登録成功, false:登録失敗
  */
 function signUp(userid) {
   let kabLastColumn = lastColumn(kabdata, 1);
   const vals = kabdata.getRange("A1:"+ toAlphabet(kabLastColumn) +"1").getValues();
-  const num = targetRange[0].indexOf(userid);
+  const num = vals[0].indexOf(userid);
 
   if (num == -1) {
     kabdata.insertColumnAfter(kabLastColumn);
@@ -87,7 +108,7 @@ function signUp(userid) {
 }
 
 /**
- * 
+ * シートから指定したIDのデータを削除
  * @param {string} userid ユーザーID
  */
 function signOut(userid) {
@@ -95,4 +116,25 @@ function signOut(userid) {
   const num = targetRange[0].indexOf(userid);
   kabdata.deleteColumn(num+1);
   userdata.deleteColumn(num+1);
+}
+
+function kabValReg(userid,value) {
+  const targetRange = kabdata.getRange("A1:"+ toAlphabet(lastColumn(kabdata, 1)) +"1").getValues();
+  const num = targetRange[0].indexOf(userid) + 1;
+  const lastNum = lastRow(kabdata, num);
+
+  const alp = toAlphabet(num);
+  if (lastNum == 29) {
+    const range = kabdata.getRange(alp + "3:" + alp + "29").getValues();
+    kabdata.getRange(alp + "2").clear();
+    kabdata.getRange(alp + "2:" + alp + "28").setValues(range);
+    kabdata.getRange(alp + "29").setValue(value);
+    return 0;
+  }
+  if (lastNum < 2) {
+    kabdata.getRange(alp + 2).setValue(value);
+    return 0;
+  }
+  kabdata.getRange(alp + (lastNum+1)).setValue(value);
+  return 0;
 }

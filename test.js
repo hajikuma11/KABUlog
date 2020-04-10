@@ -5,9 +5,22 @@ function testFunction() {
   
   const label = 'time';
   console.time(label);
-  const targetRange = userdata.getRange("A1:F1").getValues();
-  const num = targetRange[0].indexOf('dummy5');
-  userdata.deleteColumn(num+1);
+  const userid = "U813df51ee88c3bc92299dfe1a5add465";
+  const value = 777;
+  const sheet = kabdata;
+  const colNum = 3;
+  const lastCell = sheet.getRange(1, colNum).getNextDataCell(SpreadsheetApp.Direction.NEXT);
+  vals = Object.values(lastCell.getValues());
+  console.log(vals);
+  if (vals[0] == '') {
+    if (!sheet.getRange(1, colNum).getValue()) {
+      console.log(0);
+    } else {
+      console.log(1);
+    }
+  } else {
+      console.log(sheet.getRange(1, colNum).getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow());
+  }
   console.timeEnd(label);
   
 //  const targetRange = userdata.getRange("A1:U1");
@@ -15,4 +28,3 @@ function testFunction() {
 //  const finder = targetRange.createTextFinder('dummy10');
 //  const cnt = finder.replaceAllWith("");
 }
-

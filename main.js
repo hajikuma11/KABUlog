@@ -43,12 +43,24 @@ function doPost(e) {
     //基本はオウム返し、特定の言葉で異なった処理を行う。
     const userMessage = event.message.text;
     let replyMessage = userMessage + 'だに～';
+    
+    switch (true) {
+      case /signup/.test(userMessage):
+        if (signUp(userId)) {
+          replyMessage = '登録しただに～';
+        } else {
+          replyMessage = '登録失敗だに～';
+        }
+      break;
+
+      case /[0-9]+ベル$/.test(userMessage):
+        kabValReg(userId,userMessage.replace(/[^0-9]/g, ''));
+        replyMessage = userMessage + "を登録しただに～";
+      break;
+    }
+
     if (userMessage == 'signup') {
-      if (signUp(userId)) {
-        replyMessage = '登録しただに～';
-      } else {
-        replyMessage = '登録失敗だに～';
-      }
+      
     }
 
     // もし届いたユーザーからのメッセージによって他にやりたい処理
