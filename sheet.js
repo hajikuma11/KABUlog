@@ -110,17 +110,31 @@ function signUp(userid) {
 /**
  * シートから指定したIDのデータを削除
  * @param {string} userid ユーザーID
+ * @returns true:削除成功, false:削除失敗
  */
 function signOut(userid) {
   const targetRange = kabdata.getRange("A1:"+ toAlphabet(lastColumn(kabdata, 1)) +"1").getValues();
   const num = targetRange[0].indexOf(userid);
+  if (num == -1) {
+    return false;
+  }
   kabdata.deleteColumn(num+1);
   userdata.deleteColumn(num+1);
+  return true;
 }
 
+/**
+ * シートにカブ価を登録
+ * @param userid ユーザーID
+ * @param value 登録するカブ価
+ * @returns true:登録成功, false:登録失敗
+ */
 function kabValReg(userid,value) {
   const targetRange = kabdata.getRange("A1:"+ toAlphabet(lastColumn(kabdata, 1)) +"1").getValues();
   const num = targetRange[0].indexOf(userid) + 1;
+  if (num == -1) {
+    return false;
+  }
   const lastNum = lastRow(kabdata, num);
 
   const alp = toAlphabet(num);
@@ -129,12 +143,12 @@ function kabValReg(userid,value) {
     kabdata.getRange(alp + "2").clear();
     kabdata.getRange(alp + "2:" + alp + "28").setValues(range);
     kabdata.getRange(alp + "29").setValue(value);
-    return 0;
+    return true;
   }
   if (lastNum < 2) {
     kabdata.getRange(alp + 2).setValue(value);
-    return 0;
+    return true;
   }
   kabdata.getRange(alp + (lastNum+1)).setValue(value);
-  return 0;
+  return true;
 }
