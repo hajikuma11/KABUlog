@@ -54,7 +54,7 @@ function doPost(e) {
         }
       break;
 
-      case /[0-9]+ベル$/.test(userMessage) || /[0-9]+円$/.test(userMessage):
+      case /[0-9０-９]+[ベル 円 ドル]$/.test(userMessage):
         if (kabValReg(userId,userMessage.replace(/[^0-9]/g, ''))) {
           replyMessages[0] = userMessage + "を登録しただに～";
           replyMessages[1] = "カブ　カブ　あがれ～";
