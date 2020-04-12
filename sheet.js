@@ -132,7 +132,7 @@ function signOut(userid) {
 function kabValReg(userid,value) {
   const targetRange = kabdata.getRange("A1:"+ toAlphabet(lastColumn(kabdata, 1)) +"1").getValues();
   const num = targetRange[0].indexOf(userid) + 1;
-  if (num == -1) {
+  if (num == ０) {
     return false;
   }
   const lastNum = lastRow(kabdata, num);

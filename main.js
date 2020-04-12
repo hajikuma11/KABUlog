@@ -41,32 +41,39 @@ function doPost(e) {
   
   if(event.type == 'message') {
     //基本はオウム返し、特定の言葉で異なった処理を行う。
+    let replyMessages = ['','',''];
     const userMessage = event.message.text;
-    let replyMessage = userMessage + 'だに～';
+    replyMessages[0] = userMessage + 'だに～';
     
     switch (true) {
       case /signup/.test(userMessage):
         if (signUp(userId)) {
-          replyMessage = '登録しただに～';
+          replyMessages[0] = '登録しただに～';
         } else {
-          replyMessage = '登録失敗だに～';
+          replyMessages[0] = '登録失敗だに～';
         }
       break;
 
-      case /[0-9]+ベル$/.test(userMessage):
-        kabValReg(userId,userMessage.replace(/[^0-9]/g, ''));
-        replyMessage = userMessage + "を登録しただに～";
+      case /[0-9]+ベル$/.test(userMessage) || /[0-9]+円$/.test(userMessage):
+        if (kabValReg(userId,userMessage.replace(/[^0-9]/g, ''))) {
+          replyMessages[0] = userMessage + "を登録しただに～";
+          replyMessages[1] = "カブ　カブ　あがれ～";
+        } else {
+          replyMessages[0] = "登録失敗だに～";
+          replyMessages[1] = "ユーザー登録はしただに？\nユーザー登録には「signup」と送ってほしいだに";
+        }
       break;
     }
 
-    if (userMessage == 'signup') {
-      
-    }
-
-    // もし届いたユーザーからのメッセージによって他にやりたい処理
-    // (ex: spread sheetへの記入など)がある場合は、ここに入れて下さい。
+    //replyMessagesの数によってmessagesを作成
 
     const url = 'https://api.line.me/v2/bot/message/reply';
+    let messages = [];
+    replyMessages.forEach(msg => {
+      if (msg != '') {
+        messages.push({'type':'text','text':msg});
+      }
+    });
 
     UrlFetchApp.fetch(url, {
       'headers': {
@@ -76,10 +83,7 @@ function doPost(e) {
       'method': 'post',
       'payload': JSON.stringify({
         'replyToken': replyToken,
-        'messages': [{
-          'type': 'text',
-          'text': replyMessage,
-        }],
+        'messages': messages,
       }),
     });
     return ContentService.createTextOutput(
