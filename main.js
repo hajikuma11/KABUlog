@@ -5,12 +5,6 @@
  */
 
 /**
- * LINEのチャンネルアクセストークン
- * @type {string}
- */
-const CHANNEL_ACCESS_TOKEN = 'ZXl3ygFenENGMEGBe8VBZYOvivh8DIhRib5Ocl6nINNjvDNlzSZ3vNmA9bT3sk1JMLuC1ognMTjOVX2XxVBVU373OpkTcXFOuZZIaomkLQbcpgkerRQVojLr2FwzOpAhkdz2LMoEGwPp6HSwEtcGEwdB04t89/1O/w1cDnyilFU=';
-
-/**
  * 送られてきたメッセージを処理してポストする関数
  * @param e POSTされたデータ
  */
@@ -63,6 +57,9 @@ function doPost(e) {
           replyMessages[1] = "ユーザー登録はしただに？\nユーザー登録には「signup」と送ってほしいだに";
         }
       break;
+
+      case /reference/.test(userMessage):
+        const data = referenceData(userId);
     }
 
     //replyMessagesの数によってmessagesを作成
