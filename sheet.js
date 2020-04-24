@@ -152,3 +152,11 @@ function kabValReg(userid,value) {
   kabdata.getRange(alp + (lastNum+1)).setValue(value);
   return true;
 }
+
+function referenceData(userid) {
+  const targetRange = kabdata.getRange("A1:"+ toAlphabet(lastColumn(kabdata, 1)) +"1").getValues();
+  const num = targetRange[0].indexOf(userid) + 1;
+  const lastNum = lastRow(kabdata, num);
+  const values = kabdata.getRange(2,num,lastNum-1);
+  return values;
+}

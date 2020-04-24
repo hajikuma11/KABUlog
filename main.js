@@ -4,6 +4,12 @@
  * 参考にさせていただいた記事
  */
 
+ /**
+ * LINEのチャンネルアクセストークン
+ * @type {string}
+ */
+const CHANNEL_ACCESS_TOKEN = PropertiesService.getScriptProperties().getProperty("CHANNEL_ACCESS_TOKEN");
+
 /**
  * 送られてきたメッセージを処理してポストする関数
  * @param e POSTされたデータ

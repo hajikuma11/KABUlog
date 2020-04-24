@@ -5,22 +5,7 @@ function testFunction() {
   
   const label = 'time';
   console.time(label);
-  const userid = "U813df51ee88c3bc92299dfe1a5add465";
-  const value = 777;
-  const sheet = kabdata;
-  const colNum = 3;
-  const lastCell = sheet.getRange(1, colNum).getNextDataCell(SpreadsheetApp.Direction.NEXT);
-  vals = Object.values(lastCell.getValues());
-  console.log(vals);
-  if (vals[0] == '') {
-    if (!sheet.getRange(1, colNum).getValue()) {
-      console.log(0);
-    } else {
-      console.log(1);
-    }
-  } else {
-      console.log(sheet.getRange(1, colNum).getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow());
-  }
+  const res = referenceData('testid');
   console.timeEnd(label);
   
 //  const targetRange = userdata.getRange("A1:U1");
